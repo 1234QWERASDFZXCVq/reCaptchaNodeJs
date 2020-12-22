@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+    <script src="https://www.google.com/recaptcha/api.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subscribe Form</title>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Subscribe</h1>
+        <form id="subscribeForm">
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" name="name" id="name" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="text" name="email" id="email" class="form-control">
+            </div>
+            <div class="form-group">
+                <div class="g-recaptcha" data-sitekey="6LeQsBAaAAAAAFnNVh8M8hXGG28G91-8yRjDxARV"></div>
+            </div>
+            <input type="submit" value="Submit" class="btn btn-primary">
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('subscribeForm').addEventListener('submit',
+            submitForm);
+
+        function submitForm(e) {
+            e.preventDefault();
+            console.log(123)
+            const name = document.querySelector('#name').value;
+            const email = document.querySelector('#email').value;
+            const captcha = document.querySelector('#g-recaptcha-response').value;
+
+            fetch('/subscribe', {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json, text/plain, */*',
+                    'Content-type': 'application/json'
+                },
+                body: JSON.stringify({ name: name, email: email, captcha: captcha })
+            })
+                .then((res) => res.json())
+                .then((data) => {
+                    console.log(data);
+                    alert(data.msg);
+                });
+        }
+    </script>
+
+</body>
+
+</html>
